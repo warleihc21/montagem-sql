@@ -31,7 +31,7 @@
         <form action="{% url 'safra' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="row">
                 <div class="col-md-12" style="display: flex; margin-bottom: 10px;">
-                  <div class="card align-items-center">
+                  <div class="card align-items-center shadow">
                     <img class="card-img-top" src="{% static 'sqlapp/img/unnamed.png' %}" style="width: 286px; height: 286px;" alt="Imagem de capa do card">
                     <div class="card-body">
                       <label for="file">SAFRA:</label>
