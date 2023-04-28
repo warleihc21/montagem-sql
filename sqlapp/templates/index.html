@@ -13,45 +13,66 @@
     
 
 {% block 'body' %}
-    
+
+
+  <style>
+    .botaoClicado {
+      background-color: yellow;
+      color: white;
+    }
+  </style>
+      
       
 
     <div class="container" style="margin-top: 100px;">
         <form action="{% url 'index' %}" method="POST">{% csrf_token %}
             <div class="row">
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">SAFRA</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">SAFRA</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'bradesco' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">BRADESCO</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'bradesco' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">BRADESCO</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">C6 BANK</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">C6 BANK</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">CETELEM</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">CETELEM</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">FACTA</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">FACTA</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">OLÉ</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">OLÉ</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">PAN</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">PAN</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">BANRISUL</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">BANRISUL</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">DAYCOVAL</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">DAYCOVAL</a>              
                 </div>
                 <div class="col-md" style="display: flex; margin-bottom: 10px;">
-                  <a class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">MASTER</a>              
+                  <a id="meuBotao" class="btn btn-success btn-lg" href="{% url 'safra' %}" style="width: 200px; height: 200px; line-height: 180px; border-radius: 50%;">MASTER</a>              
                 </div>
             </div>
         </form>
     </div>
+
+
+
+    <script>
+      const botao = document.getElementById("meuBotao");
+      botao.addEventListener("click", () => {
+        botao.classList.add("botaoClicado");
+        if (!botao.getAttribute("data-clicado")) {
+          console.log("Tarefa executada!");
+          botao.setAttribute("data-clicado", true);
+        }
+      });
+    </script>
 
 {% endblock %}
 
