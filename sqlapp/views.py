@@ -49,4 +49,37 @@ def safra(request):
 
 
 
+@login_required(login_url='/auth/logar/')
+def bradesco(request):
+    if request.method == 'POST' and request.FILES['file']:
+        file = request.FILES['file']
+        tabela = pd.read_csv(file, sep=';')
+
+        tabela.insert(loc=31, column='Natureza', value=0)
+        tabela.insert(loc=32, column='Tipo', value=0)
+        celulas_vazias = tabela.isnull()
+        somente_vazias = tabela[tabela['Nome Subcorban'].isnull()]
+
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Natureza'] = 'CREDITO A VISTA'
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Natureza'] = 'CREDITO A VISTA'
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Natureza'] = 'CREDITO DIFERIDO'
+
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Tipo'] = 'A VISTA'
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Tipo'] = 'A VISTA'
+        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Tipo'] = 'DIFERIDO'
+
+        filenamessave = filedialog.asksaveasfilename(
+                        filetypes=(
+                            ("Arquivos csv", "*.csv"),
+                            ("Todos os arquivos", "*.*"),
+                        )
+                    )
+
+        somente_vazias.to_csv(filenamessave, index=False)        
+        messages.add_message(request, constants.SUCCESS, 'Arquivo processado com sucesso!')
+    
+    return render(request, 'bradesco.html')
+
+
+
 
