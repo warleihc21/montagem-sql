@@ -52,32 +52,26 @@ def safra(request):
 @login_required(login_url='/auth/logar/')
 def bradesco(request):
     if request.method == 'POST' and request.FILES['file']:
-        file = request.FILES['file']
-        tabela = pd.read_csv(file, sep=';')
+        with open('file', encoding='iso-8859-1') as f:
+            tabela = pd.read_csv(f, sep=';')
 
-        tabela.insert(loc=31, column='Natureza', value=0)
-        tabela.insert(loc=32, column='Tipo', value=0)
-        celulas_vazias = tabela.isnull()
-        somente_vazias = tabela[tabela['Nome Subcorban'].isnull()]
+        # Substituir pontos por vírgulas nas colunas 'VALOR BRUTO', 'VALOR LIQUIDO' e 'VALOR LANCAMENTO'
+        tabela['VALOR BRUTO'] = tabela['VALOR BRUTO'].str.replace('.', ',')
+        tabela['VALOR LIQUIDO'] = tabela['VALOR LIQUIDO'].str.replace('.', ',')
+        tabela['VALOR LANÇAMENTO'] = tabela['VALOR LANÇAMENTO'].str.replace('.', ',')
 
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Natureza'] = 'CREDITO A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Natureza'] = 'CREDITO A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Natureza'] = 'CREDITO DIFERIDO'
-
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Tipo'] = 'A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Tipo'] = 'A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Tipo'] = 'DIFERIDO'
-
+        # Salvar o arquivo processado
         filenamessave = filedialog.asksaveasfilename(
                         filetypes=(
                             ("Arquivos csv", "*.csv"),
                             ("Todos os arquivos", "*.*"),
                         )
                     )
+        tabela.to_csv(filenamessave, index=False)
 
-        somente_vazias.to_csv(filenamessave, index=False)        
+        # Exibir mensagem de sucesso
         messages.add_message(request, constants.SUCCESS, 'Arquivo processado com sucesso!')
-    
+
     return render(request, 'bradesco.html')
 
 
