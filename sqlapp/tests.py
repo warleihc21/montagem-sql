@@ -29,6 +29,6 @@ tabela["CODIGO PROMOTORA PRODUTORA"].fillna(codigo, inplace=True)
 
 
 
-tabela.to_csv(r"C:\Users\junio\Downloads\2642 BRADESCO 15062022(Bloqueado).csv", index=False, sep=";", encoding='utf-8-sig')
+tabela.to_csv(r"C:\Users\junio\Downloads\2642 BRADESCO 15062022(Bloqueado).csv", index=False, sep=";", encoding='utf-8-sig', float_format='%.2f')
 
 print(tabela)

@@ -9,12 +9,35 @@ from django.shortcuts import render, get_object_or_404
 import pandas as pd
 from tkinter import filedialog
 import tkinter as Tk
+from .forms import CsvUploadForm
+from .models import CsvData
+
 
 
 
 @login_required(login_url='/auth/logar/')
 def index(request):    
     return render(request, 'index.html')
+
+
+@login_required(login_url='/auth/logar/')
+def upload_csv(request):
+    form = CsvUploadForm()
+    if request.method == 'POST':
+        form = CsvUploadForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    return render(request, 'upload.html', {'form': form})
+
+
+@login_required(login_url='/auth/logar/')
+def home(request):
+    data = CsvData.objects.all()
+    return render(request, 'home.html', {'data': data})
+
+
+
 
 @login_required(login_url='/auth/logar/')
 def safra(request):

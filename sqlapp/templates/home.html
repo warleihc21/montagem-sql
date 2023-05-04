@@ -1,0 +1,42 @@
+{% extends 'base_sqlapp.html' %}
+
+{% load static %}
+
+{% block 'head' %}
+    
+{% endblock %}
+    
+
+{% block 'titulo' %}Safra{% endblock %}
+
+{% block content %}
+<h1>Dados CSV</h1>
+<table>
+  <tr>
+    <th>Proposta</th>
+    <th>Cliente</th>
+    <th>CPF</th>
+    <th>Operação</th>
+    <th>Valor Bruto</th>
+    <th>Valor Liquido</th>
+    <th>Valor de Lançamento</th>
+    <th>Data de Lançamento</th>
+    <th>Data do Upload</th>
+  </tr>
+  {% for d in data %}
+  <tr>
+    <td>{{ d.proposta }}</td>
+    <td>{{ d.cliente }}</td>
+    <td>{{ d.cpf }}</td>
+    <td>{{ d.operacao }}</td>
+    <td>{{ d.valor_bruto }}</td>
+    <td>{{ d.valor_liquido }}</td>
+    <td>{{ d.lancamento }}</td>
+    <td>{{ d.data_lancamento }}</td>
+    <td>{{ d.data_upload }}</td>
+    
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
+

@@ -8,6 +8,8 @@ urlpatterns = [
     path('index/', views.index, name='index'),
     path('safra/', views.safra, name='safra'),
     path('bradesco/', views.bradesco, name='bradesco'),
+    path('home', views.home, name='home'),
+    path('upload/', views.upload_csv, name='upload_csv'),
 
 ]
 

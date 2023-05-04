@@ -1,0 +1,30 @@
+{% extends 'base_sqlapp.html' %}
+
+{% load static %}
+
+{% block 'head' %}
+    
+{% endblock %}
+    
+
+{% block 'titulo' %}Upload csv{% endblock %}
+
+{% block content %}
+
+
+<div class="container">
+    
+    <h1>Upload CSV</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enviar</button>
+        </div>
+    </div>
+    </form>
+    
+</div>
+{% endblock %}
