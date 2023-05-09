@@ -7,36 +7,63 @@
 {% endblock %}
     
 
-{% block 'titulo' %}Safra{% endblock %}
+{% block 'titulo' %}Home{% endblock %}
+  
 
-{% block content %}
-<h1>Dados CSV</h1>
-<table>
-  <tr>
-    <th>Proposta</th>
-    <th>Cliente</th>
-    <th>CPF</th>
-    <th>Operação</th>
-    <th>Valor Bruto</th>
-    <th>Valor Liquido</th>
-    <th>Valor de Lançamento</th>
-    <th>Data de Lançamento</th>
-    <th>Data do Upload</th>
-  </tr>
-  {% for d in data %}
-  <tr>
-    <td>{{ d.proposta }}</td>
-    <td>{{ d.cliente }}</td>
-    <td>{{ d.cpf }}</td>
-    <td>{{ d.operacao }}</td>
-    <td>{{ d.valor_bruto }}</td>
-    <td>{{ d.valor_liquido }}</td>
-    <td>{{ d.lancamento }}</td>
-    <td>{{ d.data_lancamento }}</td>
-    <td>{{ d.data_upload }}</td>
     
-  </tr>
-  {% endfor %}
-</table>
+
+{% block 'body' %}
+
+<div class="container-fluid mt-5">
+  <div class="panel-group mb-3">
+    <div class = "panel panel-primary">
+      <div class = "panel-heading">
+        <h1 class = "panel-title">PROPOSTAS</h1>
+      </div>
+      <!--<input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />-->
+      <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.location.href = '../view/frmFiltrar.php';" /> 
+    </div>
+  </div>
+  <div class="panel-body panel-height">
+    <table class="table table-bordered table-striped table-responsive table-hover col-lg-12 center">
+      <thead class="thead-dark">
+        <tr>
+          <th>BANCO</th>
+          <th>LAYOUT</th>
+          <th>PROPOSTA</th>
+          <th>CPF</th>
+          <th>NOME</th>
+          <th>NATUREZA DO LANÇAMENTO</th>
+          <th>TIPO DE LANÇAMENTO</th>
+          <th>OBSERVAÇÃO</th>
+          <th>BRUTO CONTRATO</th>
+          <th>LÍQUIDO CONTRATO</th>
+          <th>VLR LANÇAMENTO</th>
+          <th>% DO LANÇAMENTO</th>
+          <th>DATA DA PROPOSTA</th>
+          <th>DATA DO LANÇAMENTO</th>
+        </tr>
+      </thead>
+      {% for d in data %}
+      <tr>
+        <td>{{ d.banco }}</td>
+        <td>{{ d.layout }}</td>
+        <td>{{ d.cpf }}</td>
+        <td>{{ d.nome }}</td>
+        <td>{{ d.natureza_do_lancamento }}</td>
+        <td>{{ d.tipo_de_lancamento }}</td>
+        <td>{{ d.observacao }}</td>
+        <td>{{ d.bruto_contrato }}</td>
+        <td>{{ d.liquido_contrato }}</td>
+        <td>{{ d.vlr_lancamento }}</td>
+        <td>{{ d.percentual_lancamento }}</td>
+        <td>{{ d.data_da_proposta }}</td>
+        <td>{{ d.data_do_lancamento }}</td>
+        
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
 {% endblock %}
 
