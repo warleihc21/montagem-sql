@@ -11,6 +11,7 @@ from tkinter import filedialog
 import tkinter as Tk
 from .forms import CsvUploadForm
 from .models import CsvData
+from django.core.files.storage import FileSystemStorage
 
 
 
@@ -58,16 +59,35 @@ def safra(request):
         somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Tipo'] = 'A VISTA'
         somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Tipo'] = 'DIFERIDO'
 
-        filenamessave = filedialog.asksaveasfilename(
-                        filetypes=(
-                            ("Arquivos csv", "*.csv"),
-                            ("Todos os arquivos", "*.*"),
-                        )
-                    )
+        # Seleciona somente as colunas desejadas
+        somente_vazias = somente_vazias[['Contrato', 'CPF', 'Nome Cliente', 'Natureza', 'Tipo',
+                                         'Tp Pagamento Bruto Comissao', 'Valor Principal', 'Vl Troco',
+                                         'Vl Pagamento Bruto Comissao', 'Pc Comissao a vista',
+                                         'Data Pagamento Comissao']]
 
-        somente_vazias.to_csv(filenamessave, index=False)        
+        # Salva os dados no banco de dados
+        for index, row in somente_vazias.iterrows():
+            CsvData.objects.create(
+                proposta=row['Contrato'],
+                cpf=row['CPF'],
+                nome=row['Nome Cliente'],
+                natureza_do_lancamento=row['Natureza'],
+                tipo_de_lancamento=row['Tipo'],
+                observacao=row['Tp Pagamento Bruto Comissao'],
+                bruto_contrato=row['Valor Principal'],
+                liquido_contrato=row['Vl Troco'],
+                vlr_lancamento=row['Vl Pagamento Bruto Comissao'],
+                percentual_lancamento=row['Pc Comissao a vista'],
+                data_do_lancamento =row['Data Pagamento Comissao']
+            )
+
+        # Salva o arquivo processado no sistema de arquivos do servidor
+        fs = FileSystemStorage()
+        filename = fs.save(file.name, file)
+        somente_vazias.to_csv(filename, index=False)
+
         messages.add_message(request, constants.SUCCESS, 'Arquivo processado com sucesso!')
-    
+
     return render(request, 'safra.html')
 
 
