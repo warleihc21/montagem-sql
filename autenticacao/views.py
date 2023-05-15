@@ -67,7 +67,7 @@ def logar(request):
             return redirect('/auth/logar')
         else:
             auth.login(request, usuario)
-            return redirect('/home_music')
+            return redirect('/index')
 
 def sair(request):
     auth.logout(request)
