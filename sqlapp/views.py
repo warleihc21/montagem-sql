@@ -12,6 +12,7 @@ import tkinter as Tk
 from .forms import CsvUploadForm
 from .models import CsvData
 from django.core.files.storage import FileSystemStorage
+from .models import CsvData
 
 
 
@@ -120,3 +121,68 @@ def bradesco(request):
 
 
 
+
+@login_required(login_url='/auth/logar/')
+def filtrar_dados(request):
+    bancos = CsvData.objects.values_list('banco', flat=True).distinct()
+    layouts = CsvData.objects.values_list('layout', flat=True).distinct()
+    propostas = CsvData.objects.values_list('proposta', flat=True).distinct()
+    cpfs = CsvData.objects.values_list('cpf', flat=True).distinct()
+    nomes = CsvData.objects.values_list('nome', flat=True).distinct()
+    naturezas = CsvData.objects.values_list('natureza_do_lancamento', flat=True).distinct()
+    tipos = CsvData.objects.values_list('tipo_de_lancamento', flat=True).distinct()
+    observacoes = CsvData.objects.values_list('observacao', flat=True).distinct()
+    valores = CsvData.objects.values_list('vlr_lancamento', flat=True).distinct()
+    datas_proposta = CsvData.objects.values_list('data_da_proposta', flat=True).distinct()
+    datas_lancamento = CsvData.objects.values_list('data_do_lancamento', flat=True).distinct()
+
+    if request.method == 'POST':
+        banco = request.POST.get('banco')
+        layout = request.POST.get('layout')
+        proposta = request.POST.get('proposta')
+        cpf = request.POST.get('cpf')
+        nome = request.POST.get('nome')
+        natureza = request.POST.get('natureza')
+        tipo = request.POST.get('tipo')
+        observacao = request.POST.get('observacao')
+        valor = request.POST.get('valor')
+        data_proposta = request.POST.get('data_proposta')
+        data_lancamento = request.POST.get('data_lancamento')
+
+        dados_filtrados = CsvData.objects.filter(
+            banco__icontains=banco,
+            layout__icontains=layout,
+            proposta__icontains=proposta,
+            cpf__icontains=cpf,
+            nome__icontains=nome,
+            natureza_do_lancamento__icontains=natureza,
+            tipo_de_lancamento__icontains=tipo,
+            observacao__icontains=observacao,
+            vlr_lancamento__icontains=valor,
+            data_da_proposta__icontains=data_proposta,
+            data_do_lancamento__icontains=data_lancamento
+        )
+
+        return render(request, 'resultado_filtro.html', {
+            'dados_filtrados': dados_filtrados
+        })
+
+    return render(request, 'filtrar_dados.html', {
+        'bancos': bancos,
+        'layouts': layouts,
+        'propostas': propostas,
+        'cpfs': cpfs,
+        'nomes': nomes,
+        'naturezas': naturezas,
+        'tipos': tipos,
+        'observacoes': observacoes,
+        'valores': valores,
+        'datas_proposta': datas_proposta,
+        'datas_lancamento': datas_lancamento
+    })
+
+
+
+@login_required(login_url='/auth/logar/')
+def resultado_filtro(request):    
+    return render(request, 'resultado_filtro.html')

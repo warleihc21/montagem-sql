@@ -10,6 +10,14 @@ urlpatterns = [
     path('bradesco/', views.bradesco, name='bradesco'),
     path('home', views.home, name='home'),
     path('upload/', views.upload_csv, name='upload_csv'),
+    path('filtrar_dados/', views.filtrar_dados, name='filtrar_dados'),
+    path('resultado_filtro/', views.resultado_filtro, name='resultado_filtro'),
+
+
+    
+
+
+    
 
 ]
 
