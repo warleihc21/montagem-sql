@@ -69,6 +69,7 @@ def safra(request):
         # Salva os dados no banco de dados
         for index, row in somente_vazias.iterrows():
             CsvData.objects.create(
+                banco='SAFRA',
                 proposta=row['Contrato'],
                 cpf=row['CPF'],
                 nome=row['Nome Cliente'],
