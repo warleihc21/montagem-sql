@@ -28,7 +28,7 @@
                     {% endif %}
 
     <!--<input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />-->
-    <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.location.href = '../view/frmFiltrar.php';" />
+    <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.location.href = '../view/frmFiltrar.php';">
 
     <div class="container d-flex justify-content-center" style="margin-top: 100px;">
         <form action="{% url 'safra' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
