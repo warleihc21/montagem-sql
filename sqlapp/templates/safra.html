@@ -28,7 +28,8 @@
                     {% endif %}
 
     <!--<input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />-->
-    <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.location.href = '../view/frmFiltrar.php';">
+    <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.history.back();">
+
 
     <div class="container d-flex justify-content-center" style="margin-top: 100px;">
         <form action="{% url 'safra' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -37,7 +38,14 @@
                   <div class="card align-items-center shadow">
                     <img class="card-img-top" src="{% static 'sqlapp/img/unnamed.png' %}" style="width: 286px; height: 286px;" alt="Imagem de capa do card">
                     <div class="card-body">
-                      <label for="file">SAFRA:</label>
+                      <label for="layout">Selecione o layout:</label>
+                      <select class="form-control" name="layout" id="layout">
+                        <option value="" selected>Selecione o Layout</option>
+                        {% for layout in layouts %}
+                        <option value="{{ layout }}">{{ layout }}</option>
+                        {% endfor %}
+                      </select>
+                      <br>
                       <input class="form-control" type="file" name="file" id="file">
                       <br>
                       <div class="card-footer d-flex justify-content-center">                        

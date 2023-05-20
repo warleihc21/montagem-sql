@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 class CsvData(models.Model):
     banco = models.CharField(max_length=100)

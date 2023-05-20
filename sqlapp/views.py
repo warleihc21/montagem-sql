@@ -12,7 +12,7 @@ import tkinter as Tk
 from .forms import CsvUploadForm
 from .models import CsvData
 from django.core.files.storage import FileSystemStorage
-from .models import CsvData
+from datetime import datetime
 
 
 
@@ -43,54 +43,63 @@ def home(request):
 
 @login_required(login_url='/auth/logar/')
 def safra(request):
+    layouts = ['CONSIGNADO', 'Layout 2', 'Layout 3']  # Adicione aqui os diferentes layouts disponíveis
     if request.method == 'POST' and request.FILES['file']:
+        layout = request.POST['layout']  # Obtém o layout selecionado pelo usuário
         file = request.FILES['file']
-        tabela = pd.read_csv(file, sep=';')
 
-        tabela.insert(loc=31, column='Natureza', value=0)
-        tabela.insert(loc=32, column='Tipo', value=0)
-        celulas_vazias = tabela.isnull()
-        somente_vazias = tabela[tabela['Nome Subcorban'].isnull()]
+        if layout == 'CONSIGNADO':
+            tabela = pd.read_csv(file, sep=';')
 
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Natureza'] = 'CREDITO A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Natureza'] = 'CREDITO A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Natureza'] = 'CREDITO DIFERIDO'
+            tabela.insert(loc=31, column='Natureza', value=0)
+            tabela.insert(loc=32, column='Tipo', value=0)
+            celulas_vazias = tabela.isnull()
+            somente_vazias = tabela[tabela['Nome Subcorban'].isnull()]
 
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Tipo'] = 'A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Tipo'] = 'A VISTA'
-        somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Tipo'] = 'DIFERIDO'
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Natureza'] = 'CREDITO A VISTA'
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Natureza'] = 'CREDITO A VISTA'
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Natureza'] = 'CREDITO DIFERIDO'
 
-        # Seleciona somente as colunas desejadas
-        somente_vazias = somente_vazias[['Contrato', 'CPF', 'Nome Cliente', 'Natureza', 'Tipo',
-                                         'Tp Pagamento Bruto Comissao', 'Valor Principal', 'Vl Troco',
-                                         'Vl Pagamento Bruto Comissao', 'Pc Comissao a vista',
-                                         'Data Pagamento Comissao']]
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA', 'Tipo'] = 'A VISTA'
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'A VISTA FGTS', 'Tipo'] = 'A VISTA'
+            somente_vazias.loc[tabela['Tp Pagamento Bruto Comissao'] == 'SERVICO', 'Tipo'] = 'DIFERIDO'
 
-        # Salva os dados no banco de dados
-        for index, row in somente_vazias.iterrows():
-            CsvData.objects.create(
-                banco='SAFRA',
-                proposta=row['Contrato'],
-                cpf=row['CPF'],
-                nome=row['Nome Cliente'],
-                natureza_do_lancamento=row['Natureza'],
-                tipo_de_lancamento=row['Tipo'],
-                observacao=row['Tp Pagamento Bruto Comissao'],
-                bruto_contrato=row['Valor Principal'],
-                liquido_contrato=row['Vl Troco'],
-                vlr_lancamento=row['Vl Pagamento Bruto Comissao'],
-                percentual_lancamento=row['Pc Comissao a vista'],
-                data_do_lancamento =row['Data Pagamento Comissao']
-            )
+            # Seleciona somente as colunas desejadas
+            somente_vazias = somente_vazias[['Contrato', 'CPF', 'Nome Cliente', 'Natureza', 'Tipo',
+                                            'Tp Pagamento Bruto Comissao', 'Valor Principal', 'Vl Troco',
+                                            'Vl Pagamento Bruto Comissao', 'Pc Comissao a vista',
+                                            'Data Pagamento Comissao']]
 
-        # Salva o arquivo processado no sistema de arquivos do servidor
-        fs = FileSystemStorage()
-        filename = fs.save(file.name, file)
-        somente_vazias.to_csv(filename, index=False)
+            # Salva os dados no banco de dados
+            for index, row in somente_vazias.iterrows():
+                CsvData.objects.create(
+                    banco='SAFRA',
+                    proposta=row['Contrato'],
+                    cpf=row['CPF'],
+                    nome=row['Nome Cliente'],
+                    natureza_do_lancamento=row['Natureza'],
+                    tipo_de_lancamento=row['Tipo'],
+                    observacao=row['Tp Pagamento Bruto Comissao'],
+                    bruto_contrato=row['Valor Principal'],
+                    liquido_contrato=row['Vl Troco'],
+                    vlr_lancamento=row['Vl Pagamento Bruto Comissao'],
+                    percentual_lancamento=row['Pc Comissao a vista'],
+                    data_do_lancamento =row['Data Pagamento Comissao']
+                )
 
-        messages.add_message(request, constants.SUCCESS, 'Arquivo processado com sucesso!')
+            # Salva o arquivo processado no sistema de arquivos do servidor
+            fs = FileSystemStorage()
+            filename = fs.save(file.name, file)
+            somente_vazias.to_csv(filename, index=False)
 
-    return render(request, 'safra.html')
+            messages.add_message(request, constants.SUCCESS, 'Arquivo processado com sucesso!')
+
+        #elif layout == 'Layout 2':
+            # Alterações específicas para o Layout 2
+        #elif layout == 'Layout 3':
+            # Alterações específicas para o Layout 3
+
+    return render(request, 'safra.html', {'layouts': layouts})
 
 
 
@@ -125,65 +134,77 @@ def bradesco(request):
 
 @login_required(login_url='/auth/logar/')
 def filtrar_dados(request):
-    bancos = CsvData.objects.values_list('banco', flat=True).distinct()
-    layouts = CsvData.objects.values_list('layout', flat=True).distinct()
-    propostas = CsvData.objects.values_list('proposta', flat=True).distinct()
-    cpfs = CsvData.objects.values_list('cpf', flat=True).distinct()
-    nomes = CsvData.objects.values_list('nome', flat=True).distinct()
-    naturezas = CsvData.objects.values_list('natureza_do_lancamento', flat=True).distinct()
-    tipos = CsvData.objects.values_list('tipo_de_lancamento', flat=True).distinct()
-    observacoes = CsvData.objects.values_list('observacao', flat=True).distinct()
-    valores = CsvData.objects.values_list('vlr_lancamento', flat=True).distinct()
-    datas_proposta = CsvData.objects.values_list('data_da_proposta', flat=True).distinct()
-    datas_lancamento = CsvData.objects.values_list('data_do_lancamento', flat=True).distinct()
+    if request.method == 'GET':
+        banco = request.GET.get('banco')
+        layout = request.GET.get('layout')
+        proposta = request.GET.get('proposta')
+        cpf = request.GET.get('cpf')
+        nome = request.GET.get('nome')
+        natureza_do_lancamento = request.GET.get('natureza_do_lancamento')
+        tipo_de_lancamento = request.GET.get('tipo_de_lancamento')
+        observacao = request.GET.get('observacao')
+        maior_que = request.GET.get('maior_que')
+        menor_que = request.GET.get('menor_que')
+        data_proposta_inicio = request.GET.get('data_proposta_inicio')
+        data_proposta_final = request.GET.get('data_proposta_final')
+        data_lancamento_inicio = request.GET.get('data_lancamento_inicio')
+        data_lancamento_final = request.GET.get('data_lancamento_final')
+        dados = CsvData.objects.all()
 
-    if request.method == 'POST':
-        banco = request.POST.get('banco')
-        layout = request.POST.get('layout')
-        proposta = request.POST.get('proposta')
-        cpf = request.POST.get('cpf')
-        nome = request.POST.get('nome')
-        natureza = request.POST.get('natureza')
-        tipo = request.POST.get('tipo')
-        observacao = request.POST.get('observacao')
-        valor = request.POST.get('valor')
-        data_proposta = request.POST.get('data_proposta')
-        data_lancamento = request.POST.get('data_lancamento')
+        if banco or layout or proposta or cpf or nome or natureza_do_lancamento or tipo_de_lancamento or observacao or maior_que or menor_que or data_proposta_inicio or data_proposta_final or data_lancamento_inicio or data_lancamento_final:
 
-        dados_filtrados = CsvData.objects.filter(
-            banco__icontains=banco,
-            layout__icontains=layout,
-            proposta__icontains=proposta,
-            cpf__icontains=cpf,
-            nome__icontains=nome,
-            natureza_do_lancamento__icontains=natureza,
-            tipo_de_lancamento__icontains=tipo,
-            observacao__icontains=observacao,
-            vlr_lancamento__icontains=valor,
-            data_da_proposta__icontains=data_proposta,
-            data_do_lancamento__icontains=data_lancamento
-        )
+            if not maior_que:
+                maior_que = 0
 
-        return render(request, 'resultado_filtro.html', {
-            'dados_filtrados': dados_filtrados
-        })
+            if not menor_que:
+                menor_que = 999999999999
 
-    return render(request, 'filtrar_dados.html', {
-        'bancos': bancos,
-        'layouts': layouts,
-        'propostas': propostas,
-        'cpfs': cpfs,
-        'nomes': nomes,
-        'naturezas': naturezas,
-        'tipos': tipos,
-        'observacoes': observacoes,
-        'valores': valores,
-        'datas_proposta': datas_proposta,
-        'datas_lancamento': datas_lancamento
-    })
+            if banco:
+                dados = dados.filter(banco=banco)
+
+            if layout:
+                dados = dados.filter(layout=layout)
+
+            if proposta:
+                dados = dados.filter(proposta=proposta)
+
+            if cpf:
+                dados = dados.filter(cpf=cpf)
+
+            if nome:
+                dados = dados.filter(nome__icontains=nome)
+
+            if natureza_do_lancamento:
+                dados = dados.filter(natureza_do_lancamento=natureza_do_lancamento)
+            
+            if tipo_de_lancamento:
+                dados = dados.filter(tipo_de_lancamento=tipo_de_lancamento)
+
+            if observacao:
+                dados = dados.filter(observacao__icontains=observacao)
+
+            dados = dados.filter(vlr_lancamento__gte=maior_que).filter(vlr_lancamento__lte=menor_que)
+
+            if data_proposta_inicio and data_proposta_final:
+                # Converter as strings em objetos de data
+                data_proposta_inicio = datetime.strptime(data_proposta_inicio, '%Y-%m-%d').date()
+                data_proposta_final = datetime.strptime(data_proposta_final, '%Y-%m-%d').date()
+
+                # Filtrar os objetos usando a faixa de datas
+                objetos_filtrados = CsvData.objects.filter(data__range=(data_proposta_inicio, data_proposta_final))
+            else:
+                objetos_filtrados = CsvData.objects.all()
+
+            # Passar os objetos filtrados para o contexto e renderizar o template
+            context = {
+                'objetos_filtrados': objetos_filtrados
+            }
+
+    return render(request, 'filtrar_dados.html')
 
 
 
 @login_required(login_url='/auth/logar/')
-def resultado_filtro(request):    
+def resultado_filtro(request):
+
     return render(request, 'resultado_filtro.html')

@@ -14,6 +14,16 @@
 
 {% block 'body' %}
 
+                    {% if messages %}
+                        <br>
+                        {% for message in messages %}
+                            <div class="alert {{message.tags}}">
+                                {{message}}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+
 <div class="container-fluid mt-5">
   <div class="panel-group mb-3">
     <div class = "panel panel-primary">
