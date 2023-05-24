@@ -29,8 +29,7 @@
       <h1>FILTRAR DADOS</h1>
       <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();">
         <div class="panel-body panel-height">
-            <form method="GET" action="{% url 'resultado_filtro' %}">
-                {% csrf_token %}
+            <form method="GET" action="{% url 'resultado_filtro' %}">{% csrf_token %}                
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="banco">Banco:</label>
@@ -54,17 +53,17 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="proposta">Proposta</label>
-                      <input type="text" class="form-control" id="proposta" placeholder="">
+                      <input type="text" class="form-control" id="proposta" placeholder="" value="{{ filtro_proposta }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="cpf">CPF</label>
-                      <input type="number" class="form-control" id="cpf" placeholder="">
+                      <input type="value" class="form-control" id="cpf" placeholder="" value="{{ filtro_cpf }}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nome">Nome</label>
-                      <input type="text" class="form-control" id="nome" placeholder="">
+                      <input type="text" class="form-control" id="nome" placeholder="" value="{{ filtro_nome }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="natureza_do_lancamento">Natureza do Lançamento:</label>
@@ -88,7 +87,7 @@
                   </div>
                     <div class="form-group col-md-6">
                       <label for="observacao">Observações</label>
-                      <input type="text" class="form-control" id="observacao" placeholder="">
+                      <input type="text" class="form-control" id="observacao" placeholder="" value="{{ filtro_observacao }}">
                     </div>
                 </div>
                 <br>
@@ -97,11 +96,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="maior_que">Maior que</label>
-                      <input type="value" class="form-control" id="maior_que" placeholder="" name="maior_que">
+                      <input type="value" class="form-control" id="maior_que" placeholder="" name="maior_que" value="{{ filtro_maior_que }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="menor_que">Menor que</label>
-                      <input type="value" class="form-control" id="menor_que" placeholder="" name="menor_que">
+                      <input type="value" class="form-control" id="menor_que" placeholder="" name="menor_que" value="{{ filtro_menor_que }}">
                     </div>
                 </div>
                 <br>
@@ -110,11 +109,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="data_proposta_inicio">Início</label>
-                      <input type="date" class="form-control" id="data_proposta_inicio" placeholder="" name="data_proposta_inicio">
+                      <input type="date" class="form-control" id="data_proposta_inicio" placeholder="" name="data_proposta_inicio" value="{{ filtro_data_proposta_inicio }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="data_proposta_final">Final</label>
-                      <input type="date" class="form-control" id="data_proposta_final" placeholder="" name="data_proposta_final">
+                      <input type="date" class="form-control" id="data_proposta_final" placeholder="" name="data_proposta_final" value="{{ filtro_data_proposta_final }}">
                     </div>
                 </div>
                 <br>
@@ -123,11 +122,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="data_lancamento_inicio">Início</label>
-                      <input type="date" class="form-control" id="data_lancamento_inicio" placeholder="" name="data_lancamento_inicio">
+                      <input type="date" class="form-control" id="data_lancamento_inicio" placeholder="" name="data_lancamento_inicio" value="{{ filtro_data_lancamento_inicio }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="data_lancamento_final">Final</label>
-                      <input type="date" class="form-control" id="data_lancamento_final" placeholder="" name="data_lancamento_final">
+                      <input type="date" class="form-control" id="data_lancamento_final" placeholder="" name="data_lancamento_final" value="{{ filtro_data_lancamento_final }}">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Filtrar</button>

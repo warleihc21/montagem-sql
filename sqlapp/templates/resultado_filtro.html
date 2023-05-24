@@ -30,8 +30,8 @@
       <div class = "panel-heading">
         <h1 class = "panel-title">PROPOSTAS</h1>
       </div>
-      <!--<input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />-->
-      <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="window.location.href = '../view/frmFiltrar.php';" /> 
+      <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />
+      
     </div>
   </div>
   <div class="panel-body panel-height">
@@ -54,7 +54,7 @@
           <th>DATA DO LANÇAMENTO</th>
         </tr>
       </thead>
-      {% for d in data %}
+      {% for d in data_param %}
       <tr>
         <td>{{ d.banco }}</td>
         <td>{{ d.layout }}</td>
