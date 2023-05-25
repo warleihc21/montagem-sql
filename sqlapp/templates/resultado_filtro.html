@@ -7,7 +7,7 @@
 {% endblock %}
     
 
-{% block 'titulo' %}Home{% endblock %}
+{% block 'titulo' %}Resultado do Filtro{% endblock %}
   
 
     
@@ -35,46 +35,44 @@
     </div>
   </div>
   <div class="panel-body panel-height">
-    <table class="table table-bordered table-striped table-responsive table-hover col-lg-12 center">
-      <thead class="thead-dark">
-        <tr>
-          <th>BANCO</th>
-          <th>LAYOUT</th>
-          <th>PROPOSTA</th>
-          <th>CPF</th>
-          <th>NOME</th>
-          <th>NATUREZA DO LANÇAMENTO</th>
-          <th>TIPO DE LANÇAMENTO</th>
-          <th>OBSERVAÇÃO</th>
-          <th>BRUTO CONTRATO</th>
-          <th>LÍQUIDO CONTRATO</th>
-          <th>VLR LANÇAMENTO</th>
-          <th>% DO LANÇAMENTO</th>
-          <th>DATA DA PROPOSTA</th>
-          <th>DATA DO LANÇAMENTO</th>
-        </tr>
-      </thead>
-      {% for d in data_param %}
-      <tr>
-        <td>{{ d.banco }}</td>
-        <td>{{ d.layout }}</td>
-        <td>{{ d.proposta }}</td>
-        <td>{{ d.cpf }}</td>
-        <td>{{ d.nome }}</td>
-        <td>{{ d.natureza_do_lancamento }}</td>
-        <td>{{ d.tipo_de_lancamento }}</td>
-        <td>{{ d.observacao }}</td>
-        <td>R$ {{ d.bruto_contrato }}</td>
-        <td>{{ d.liquido_contrato }}</td>
-        <td>R$ {{ d.vlr_lancamento }}</td>
-        <td>{{ d.percentual_lancamento }}%</td>
-        <td>{{ d.data_da_proposta }}</td>
-        <td>{{ d.data_do_lancamento }}</td>
-        
-      </tr>
-      {% endfor %}
-    </table>
+        {% if dados %}
+        <table class="table table-bordered table-striped table-responsive table-hover col-lg-12 center">
+          <thead class="thead-dark">
+            <tr>
+              <th>Banco</th>
+              <th>Layout</th>
+              <th>Proposta</th>
+              <th>CPF</th>
+              <th>Nome</th>
+              <th>Natureza do Lançamento</th>
+              <th>Tipo de Lançamento</th>
+              <th>Observação</th>
+              <th>Valor do Lançamento</th>
+              <th>Data da Proposta</th>
+              <th>Data do Lançamento</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for dado in dados %}
+              <tr>
+                <td>{{ dado.banco }}</td>
+                <td>{{ dado.layout }}</td>
+                <td>{{ dado.proposta }}</td>
+                <td>{{ dado.cpf }}</td>
+                <td>{{ dado.nome }}</td>
+                <td>{{ dado.natureza_do_lancamento }}</td>
+                <td>{{ dado.tipo_de_lancamento }}</td>
+                <td>{{ dado.observacao }}</td>
+                <td>{{ dado.vlr_lancamento }}</td>
+                <td>{{ dado.data_da_proposta }}</td>
+                <td>{{ dado.data_do_lancamento }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>Nenhum dado encontrado.</p>
+      {% endif %}
   </div>
-</div>
 {% endblock %}
 
