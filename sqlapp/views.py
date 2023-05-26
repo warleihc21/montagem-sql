@@ -127,12 +127,14 @@ def filtrar_dados(request):
     layouts = CsvData.objects.values_list('layout', flat=True).distinct()
     naturezas_do_lancamento = CsvData.objects.values_list('natureza_do_lancamento', flat=True).distinct()
     tipos_de_lancamento = CsvData.objects.values_list('tipo_de_lancamento', flat=True).distinct()
+    observacaos = CsvData.objects.values_list('observacao', flat=True).distinct()
 
     return render(request, 'filtrar_dados.html', {
         'bancos': bancos,
         'layouts': layouts,
         'natureza_do_lancamentos': naturezas_do_lancamento,
-        'tipo_de_lancamentos': tipos_de_lancamento
+        'tipo_de_lancamentos': tipos_de_lancamento,
+        'observacaos': observacaos   
     })
 
 

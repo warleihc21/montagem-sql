@@ -84,11 +84,16 @@
                         <option value="{{ tipo_de_lancamento }}">{{ tipo_de_lancamento }}</option>
                         {% endfor %}
                     </select>
-                  </div>
+                  </div>                  
                     <div class="form-group col-md-6">
-                      <label for="observacao">Observações</label>
-                      <input type="text" class="form-control" id="observacao" placeholder="" value="{{ filtro_observacao }}">
-                    </div>
+                      <label for="observacao">Observação:</label>
+                      <select class="form-control" name="observacao" id="observacao">
+                          <option value="">Todos</option>
+                          {% for observacao in observacaos %}
+                          <option value="{{ observacao }}">{{ observacao }}</option>
+                          {% endfor %}
+                      </select>
+                    </div>                  
                 </div>
                 <br>
                 <br class="separador">
