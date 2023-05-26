@@ -142,51 +142,72 @@ def filtrar_dados(request):
 @login_required(login_url='/auth/logar/')
 def resultado_filtro(request):
     if request.method == 'GET':
+        filtros = {}
+
         banco = request.GET.get('banco')
+        if banco:
+            filtros['banco__icontains'] = banco
+
         layout = request.GET.get('layout')
+        if layout:
+            filtros['layout__icontains'] = layout
+
         proposta = request.GET.get('proposta')
+        if proposta:
+            filtros['proposta__icontains'] = proposta
+
         cpf = request.GET.get('cpf')
+        if cpf:
+            filtros['cpf__icontains'] = cpf
+
         nome = request.GET.get('nome')
+        if nome:
+            filtros['nome__icontains'] = nome
+
         natureza_do_lancamento = request.GET.get('natureza_do_lancamento')
+        if natureza_do_lancamento:
+            filtros['natureza_do_lancamento__icontains'] = natureza_do_lancamento
+
         tipo_de_lancamento = request.GET.get('tipo_de_lancamento')
+        if tipo_de_lancamento:
+            filtros['tipo_de_lancamento__icontains'] = tipo_de_lancamento
+
         observacao = request.GET.get('observacao')
-        maior_que = request.GET.get('maior_que')
-        menor_que = request.GET.get('menor_que')
+        if observacao:
+            filtros['observacao__icontains'] = observacao
+
+        vlr_lancamento_maior = request.GET.get('maior_que')
+        if vlr_lancamento_maior:
+            filtros['vlr_lancamento__gt'] = vlr_lancamento_maior
+
+        vlr_lancamento_menor = request.GET.get('menor_que')
+        if vlr_lancamento_menor:
+            filtros['vlr_lancamento__lt'] = vlr_lancamento_menor
+
         data_proposta_inicio = request.GET.get('data_proposta_inicio')
+        if data_proposta_inicio:
+            filtros['data_da_proposta__gte'] = data_proposta_inicio
+
         data_proposta_final = request.GET.get('data_proposta_final')
+        if data_proposta_final:
+            filtros['data_da_proposta__lte'] = data_proposta_final
+
         data_lancamento_inicio = request.GET.get('data_lancamento_inicio')
+        if data_lancamento_inicio:
+            filtros['data_do_lancamento__gte'] = data_lancamento_inicio
+
         data_lancamento_final = request.GET.get('data_lancamento_final')
+        if data_lancamento_final:
+            filtros['data_do_lancamento__lte'] = data_lancamento_final
 
-        # Realize a filtragem dos dados com base nos parâmetros fornecidos
-        dados_filtrados = CsvData.objects.all()
+        dados_filtrados = CsvData.objects.filter(**filtros)
 
-        if banco is not None:
-            dados_filtrados = dados_filtrados.filter(banco__icontains=banco)
-        if layout is not None:
-            dados_filtrados = dados_filtrados.filter(layout__icontains=layout)
-        if proposta is not None:
-            dados_filtrados = dados_filtrados.filter(proposta__icontains=proposta)
-        if cpf is not None:
-            dados_filtrados = dados_filtrados.filter(cpf__icontains=cpf)
-        if nome is not None:
-            dados_filtrados = dados_filtrados.filter(nome__icontains=nome)
-        if natureza_do_lancamento is not None:
-            dados_filtrados = dados_filtrados.filter(natureza_do_lancamento__icontains=natureza_do_lancamento)
-        if tipo_de_lancamento is not None:
-            dados_filtrados = dados_filtrados.filter(tipo_de_lancamento__icontains=tipo_de_lancamento)
-        if observacao is not None:
-            dados_filtrados = dados_filtrados.filter(observacao__icontains=observacao)
-        if maior_que is not None:
-            dados_filtrados = dados_filtrados.filter(vlr_lancamento__gt=maior_que)
-        if menor_que is not None:
-            dados_filtrados = dados_filtrados.filter(vlr_lancamento__lt=menor_que)
-        if data_proposta_inicio is not None:
-            dados_filtrados = dados_filtrados.filter(data_da_proposta__gte=data_proposta_inicio)
-        if data_proposta_final is not None:
-            dados_filtrados = dados_filtrados.filter(data_da_proposta__lte=data_proposta_final)
-        if data_lancamento_inicio is not None:
-            dados_filtrados = dados_filtrados.filter(data_do_lancamento__gte=data_lancamento_inicio)
-        if data_lancamento_final is not None:
-            dados_filtrados = dados_filtrados.filter(data_do_lancamento__lte=data_lancamento_final)
+        if dados_filtrados:
+            return render(request, 'resultado_filtro.html', {'dados': dados_filtrados})
+        else:
+            messages.add_message(request, constants.INFO, 'Nenhum resultado encontrado.')
+            return redirect('filtrar_dados')
 
-    return render(request, 'resultado_filtro.html', {'dados': dados_filtrados})
+    return redirect('filtrar_dados')
+
+    

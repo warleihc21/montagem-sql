@@ -14,6 +14,11 @@
 
 {% block 'body' %}
 
+                    
+
+<div class="container bg-dark text-light" style="background-color: aliceblue; margin-top: 100px;">
+
+
                     {% if messages %}
                         <br>
                         {% for message in messages %}
@@ -23,7 +28,6 @@
                         {% endfor %}
                     {% endif %}
 
-<div class="container bg-dark text-light" style="background-color: aliceblue; margin-top: 100px;">
   <div class ="panel panel-dark">
     <div class ="panel-heading">
       <h1>FILTRAR DADOS</h1>
@@ -53,17 +57,17 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="proposta">Proposta</label>
-                      <input type="text" class="form-control" id="proposta" placeholder="" value="{{ filtro_proposta }}">
+                      <input type="text" class="form-control" id="proposta" placeholder="" name="proposta" value="{{ filtro_proposta }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="cpf">CPF</label>
-                      <input type="value" class="form-control" id="cpf" placeholder="" value="{{ filtro_cpf }}">
+                      <input type="value" class="form-control" id="cpf" placeholder="" name="cpf" value="{{ filtro_cpf }}">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                       <label for="nome">Nome</label>
-                      <input type="text" class="form-control" id="nome" placeholder="" value="{{ filtro_nome }}">
+                      <input type="text" class="form-control" id="nome" placeholder="" name="nome" value="{{ filtro_nome }}">
                     </div>
                     <div class="form-group col-md-6">
                       <label for="natureza_do_lancamento">Natureza do Lançamento:</label>
