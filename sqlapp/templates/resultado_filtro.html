@@ -48,7 +48,9 @@
               <th>Tipo de Lançamento</th>
               <th>Observação</th>
               <th>Valor do Lançamento</th>
+              <th>% do Lançamento</th>
               <th>Data da Proposta</th>
+              
               <th>Data do Lançamento</th>
             </tr>
           </thead>
@@ -63,7 +65,8 @@
                 <td>{{ dado.natureza_do_lancamento }}</td>
                 <td>{{ dado.tipo_de_lancamento }}</td>
                 <td>{{ dado.observacao }}</td>
-                <td>{{ dado.vlr_lancamento }}</td>
+                <td>R$ {{ dado.vlr_lancamento }}</td>
+                <td>{{ dado.percentual_lancamento }}%</td>
                 <td>{{ dado.data_da_proposta }}</td>
                 <td>{{ dado.data_do_lancamento }}</td>
               </tr>
