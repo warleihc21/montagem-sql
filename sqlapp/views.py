@@ -8,6 +8,7 @@ from .forms import CsvUploadForm
 from .models import CsvData
 from django.core.files.storage import FileSystemStorage
 from tkinter import filedialog
+from datetime import datetime
 
 
 @login_required(login_url='/auth/logar/')
@@ -58,7 +59,7 @@ def safra(request):
             # Seleciona somente as colunas desejadas
             somente_vazias = somente_vazias[['Contrato', 'CPF', 'Nome Cliente', 'Natureza', 'Tipo',
                                              'Tp Pagamento Bruto Comissao', 'Valor Principal', 'Vl Troco',
-                                             'Vl Pagamento Bruto Comissao', 'Pc Comissao a vista',
+                                             'Vl Pagamento Bruto Comissao', 'Pc Comissao a vista','Data Digitacao Contrato',
                                              'Data Pagamento Comissao']]
 
             # Salva os dados no banco de dados
@@ -76,6 +77,7 @@ def safra(request):
                     liquido_contrato=row['Vl Troco'],
                     vlr_lancamento=row['Vl Pagamento Bruto Comissao'],
                     percentual_lancamento=row['Pc Comissao a vista'],
+                    data_da_proposta=row['Data Digitacao Contrato'],
                     data_do_lancamento=row['Data Pagamento Comissao']
                 )
 
@@ -186,18 +188,22 @@ def resultado_filtro(request):
 
         data_proposta_inicio = request.GET.get('data_proposta_inicio')
         if data_proposta_inicio:
+            data_proposta_inicio = datetime.strptime(data_proposta_inicio, '%Y-%m-%d')
             filtros['data_da_proposta__gte'] = data_proposta_inicio
 
         data_proposta_final = request.GET.get('data_proposta_final')
         if data_proposta_final:
+            data_proposta_final = datetime.strptime(data_proposta_final, '%Y-%m-%d')
             filtros['data_da_proposta__lte'] = data_proposta_final
 
         data_lancamento_inicio = request.GET.get('data_lancamento_inicio')
         if data_lancamento_inicio:
+            data_lancamento_inicio = datetime.strptime(data_lancamento_inicio, '%Y-%m-%d')
             filtros['data_do_lancamento__gte'] = data_lancamento_inicio
 
         data_lancamento_final = request.GET.get('data_lancamento_final')
         if data_lancamento_final:
+            data_lancamento_final = datetime.strptime(data_lancamento_final, '%Y-%m-%d')
             filtros['data_do_lancamento__lte'] = data_lancamento_final
 
         dados_filtrados = CsvData.objects.filter(**filtros)

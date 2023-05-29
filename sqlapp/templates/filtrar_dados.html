@@ -32,6 +32,8 @@
     <div class ="panel-heading">
       <h1>FILTRAR DADOS</h1>
       <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();">
+      <br>
+      <hr>
         <div class="panel-body panel-height">
             <form method="GET" action="{% url 'resultado_filtro' %}">{% csrf_token %}                
                 <div class="form-row">
@@ -139,6 +141,8 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Filtrar</button>
+                <hr>
+                <br>
             </form>
         </div>      
     </div>
