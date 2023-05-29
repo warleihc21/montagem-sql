@@ -186,6 +186,10 @@ def resultado_filtro(request):
         if vlr_lancamento_menor:
             filtros['vlr_lancamento__lt'] = vlr_lancamento_menor
 
+        percentual_lancamento = request.GET.get('percentual_lancamento')
+        if percentual_lancamento:
+            filtros['percentual_lancamento__icontains'] = percentual_lancamento
+
         data_proposta_inicio = request.GET.get('data_proposta_inicio')
         if data_proposta_inicio:
             data_proposta_inicio = datetime.strptime(data_proposta_inicio, '%Y-%m-%d')
