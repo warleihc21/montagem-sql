@@ -12,6 +12,8 @@ urlpatterns = [
     path('upload/', views.upload_csv, name='upload_csv'),
     path('filtrar_dados/', views.filtrar_dados, name='filtrar_dados'),
     path('resultado_filtro/', views.resultado_filtro, name='resultado_filtro'),
+    path('export_csv/', views.export_csv, name='export_csv'),
+
 
 
     

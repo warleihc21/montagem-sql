@@ -31,6 +31,7 @@
         <h1 class = "panel-title">PROPOSTAS</h1>
       </div>
       <input type="button" name="btnVolta" class="btn btn-success pull-left" value="Voltar" onclick="javascript:window.history.back();" />
+      <a href="{% url 'export_csv' %}" class="btn btn-success">Exportar CSV</a>
       
     </div>
   </div>
@@ -49,8 +50,7 @@
               <th>Observação</th>
               <th>Valor do Lançamento</th>
               <th>% do Lançamento</th>
-              <th>Data da Proposta</th>
-              
+              <th>Data da Proposta</th>              
               <th>Data do Lançamento</th>
             </tr>
           </thead>

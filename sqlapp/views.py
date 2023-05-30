@@ -9,6 +9,9 @@ from .models import CsvData
 from django.core.files.storage import FileSystemStorage
 from tkinter import filedialog
 from datetime import datetime
+import csv
+from django.http import HttpResponse
+from django.contrib.sessions.backends.db import SessionStore
 
 
 @login_required(login_url='/auth/logar/')
@@ -212,6 +215,11 @@ def resultado_filtro(request):
 
         dados_filtrados = CsvData.objects.filter(**filtros)
 
+        # Armazena os filtros na sessão
+        session = SessionStore(request.session.session_key)
+        session['filtros'] = filtros
+        session.save()
+
         if dados_filtrados:
             return render(request, 'resultado_filtro.html', {'dados': dados_filtrados})
         else:
@@ -220,4 +228,38 @@ def resultado_filtro(request):
 
     return redirect('filtrar_dados')
 
+
+
+
+@login_required(login_url='/auth/logar/')
+def export_csv(request):
+    session = SessionStore(request.session.session_key)
+    filtros = session.get('filtros', {})  # Recupera os filtros da sessão
+
+    dados_filtrados = CsvData.objects.filter(**filtros)
     
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="dados_filtrados.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Banco', 'Layout', 'Proposta', 'CPF', 'Nome', 'Natureza do Lançamento',
+                     'Tipo de Lançamento', 'Observação', 'Valor do Lançamento',
+                     '% do Lançamento', 'Data da Proposta', 'Data do Lançamento'])
+
+    for dado in dados_filtrados:
+        writer.writerow([
+            dado.banco,
+            dado.layout,
+            dado.proposta,
+            dado.cpf,
+            dado.nome,
+            dado.natureza_do_lancamento,
+            dado.tipo_de_lancamento,
+            dado.observacao,
+            dado.vlr_lancamento,
+            dado.percentual_lancamento,
+            dado.data_da_proposta,
+            dado.data_do_lancamento
+        ])
+
+    return response
