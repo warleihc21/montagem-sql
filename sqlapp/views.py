@@ -12,6 +12,7 @@ from datetime import datetime
 import csv
 from django.http import HttpResponse
 from django.contrib.sessions.backends.db import SessionStore
+from django.core.paginator import Paginator
 
 
 @login_required(login_url='/auth/logar/')
@@ -212,21 +213,19 @@ def resultado_filtro(request):
         if data_lancamento_final:
             data_lancamento_final = datetime.strptime(data_lancamento_final, '%Y-%m-%d')
             filtros['data_do_lancamento__lte'] = data_lancamento_final
+            
 
         dados_filtrados = CsvData.objects.filter(**filtros)
 
-        # Armazena os filtros na sessão
-        session = SessionStore(request.session.session_key)
-        session['filtros'] = filtros
-        session.save()
+        # Configurar a paginação
+        paginator = Paginator(dados_filtrados, 50)  # 10 itens por página
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
-        if dados_filtrados:
-            return render(request, 'resultado_filtro.html', {'dados': dados_filtrados})
-        else:
-            messages.add_message(request, constants.INFO, 'Nenhum resultado encontrado.')
-            return redirect('filtrar_dados')
-
-    return redirect('filtrar_dados')
+        context = {
+            'dados': page_obj,
+        }
+        return render(request, 'resultado_filtro.html', context)
 
 
 

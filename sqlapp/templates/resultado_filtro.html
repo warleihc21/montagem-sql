@@ -75,23 +75,44 @@
         </table>
       {% else %}
         <p>Nenhum dado encontrado.</p>
+        
       {% endif %}
       <hr>
       <div>
+        <p class="justify-content-center">Total de itens encontrados: {{ dados.paginator.count }}</p>
         <nav aria-label="Navegação de página exemplo">
           <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Anterior</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            {% if dados.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="#">Próximo</a>
+              <a class="page-link" href="?page={{dados.previous_page_number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Anterior</a>
             </li>
+            {% else %}
+            <li class="page-item">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+            </li>
+            {% endif %}
+            {% for i in dados.paginator.page_range %}
+            {% if i == dados.number %}
+            <li class="page-item active"><a class="page-link">{{i}}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{i}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{i}}</a></li>
+            {% endif %}
+            {% endfor %}
+    
+            {% if dados.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{dados.next_page_number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Próximo</a></li>
+            {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Próximo</a>
+            </li>
+            {% endif %}
           </ul>
         </nav>
+        
       </div>
   </div>
 {% endblock %}
+
+
+
 
