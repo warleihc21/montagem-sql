@@ -217,14 +217,32 @@ def resultado_filtro(request):
 
         dados_filtrados = CsvData.objects.filter(**filtros)
 
+        # Armazenar os filtros na sessão
+        session = SessionStore(request.session.session_key)
+        session['filtros'] = filtros
+        session.save()
+
         # Configurar a paginação
-        paginator = Paginator(dados_filtrados, 50)  # 10 itens por página
+        paginator = Paginator(dados_filtrados, 50)
+        dados_filtrados_count = dados_filtrados.count()
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
+        # Preservar os parâmetros de filtro nos links de paginação
+        query_params = request.GET.copy()
+        if 'page' in query_params:
+            del query_params['page']
+        query_string = query_params.urlencode()
+        if query_string:
+            query_string = '&' + query_string
+        
+
         context = {
             'dados': page_obj,
+            'dados_count': dados_filtrados_count,
+            'query_string': query_string
         }
+
         return render(request, 'resultado_filtro.html', context)
 
 
@@ -242,7 +260,7 @@ def export_csv(request):
 
     writer = csv.writer(response)
     writer.writerow(['Banco', 'Layout', 'Proposta', 'CPF', 'Nome', 'Natureza do Lançamento',
-                     'Tipo de Lançamento', 'Observação', 'Valor do Lançamento',
+                     'Tipo de Lançamento', 'Observação', 'bruto_contrato', 'liquido_contrato', 'Valor do Lançamento',
                      '% do Lançamento', 'Data da Proposta', 'Data do Lançamento'])
 
     for dado in dados_filtrados:
@@ -255,6 +273,8 @@ def export_csv(request):
             dado.natureza_do_lancamento,
             dado.tipo_de_lancamento,
             dado.observacao,
+            dado.bruto_contrato,
+            dado.liquido_contrato,
             dado.vlr_lancamento,
             dado.percentual_lancamento,
             dado.data_da_proposta,

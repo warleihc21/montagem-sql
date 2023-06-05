@@ -14,6 +14,13 @@
 
 {% block 'body' %}
 
+
+<style>
+.tabela-dados {
+    font-size: 12px; /* Defina o tamanho de fonte desejado */
+}
+</style>
+
                     {% if messages %}
                         <br>
                         {% for message in messages %}
@@ -37,7 +44,7 @@
   </div>
   <div class="panel-body panel-height">
         {% if dados %}
-        <table class="table table-striped table-dark table-responsive table-hover col-lg-12 center">
+        <table class="table table-striped table-dark table-responsive table-hover col-lg-12 center tabela-dados">
           <thead class="thead-dark">
             <tr>
               <th>Banco</th>
@@ -48,6 +55,8 @@
               <th>Natureza do Lançamento</th>
               <th>Tipo de Lançamento</th>
               <th>Observação</th>
+              <th>Bruto do Contrato</th>
+              <th>Líquido do Contrato</th>
               <th>Valor do Lançamento</th>
               <th>% do Lançamento</th>
               <th>Data da Proposta</th>              
@@ -65,6 +74,8 @@
                 <td>{{ dado.natureza_do_lancamento }}</td>
                 <td>{{ dado.tipo_de_lancamento }}</td>
                 <td>{{ dado.observacao }}</td>
+                <td>R$ {{ dado.bruto_contrato }}</td>
+                <td>{{ dado.liquido_contrato }}</td>
                 <td>R$ {{ dado.vlr_lancamento }}</td>
                 <td>{{ dado.percentual_lancamento }}%</td>
                 <td>{{ dado.data_da_proposta }}</td>
@@ -79,28 +90,31 @@
       {% endif %}
       <hr>
       <div>
-        <p class="justify-content-center">Total de itens encontrados: {{ dados.paginator.count }}</p>
+        <p class="justify-content-center">Total de itens encontrados: {{ dados_count }}</p>
         <nav aria-label="Navegação de página exemplo">
           <ul class="pagination justify-content-center">
             {% if dados.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page={{dados.previous_page_number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Anterior</a>
+              <a class="page-link" href="?page={{dados.previous_page_number}}{{ query_string }}">Anterior</a>
             </li>
             {% else %}
             <li class="page-item">
               <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
             </li>
             {% endif %}
+
             {% for i in dados.paginator.page_range %}
-            {% if i == dados.number %}
-            <li class="page-item active"><a class="page-link">{{i}}</a></li>
-            {% else %}
-            <li class="page-item"><a class="page-link" href="?page={{i}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{i}}</a></li>
-            {% endif %}
+              {% if dados.number == i %}
+                <li class="page-item active">
+                  <a class="page-link">{{i}}</a>
+                </li>
+              {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{i}}{{ query_string }}">{{i}}</a></li>
+              {% endif %}
             {% endfor %}
     
             {% if dados.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{dados.next_page_number}}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Próximo</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{dados.next_page_number}}{{ query_string }}">Próximo</a></li>
             {% else %}
             <li class="page-item disabled">
               <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Próximo</a>
