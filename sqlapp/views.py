@@ -19,24 +19,6 @@ from django.core.paginator import Paginator
 def index(request):
     return render(request, 'index.html')
 
-
-@login_required(login_url='/auth/logar/')
-def upload_csv(request):
-    form = CsvUploadForm()
-    if request.method == 'POST':
-        form = CsvUploadForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    return render(request, 'upload.html', {'form': form})
-
-
-@login_required(login_url='/auth/logar/')
-def home(request):
-    data = CsvData.objects.all()
-    return render(request, 'home.html', {'data': data})
-
-
 @login_required(login_url='/auth/logar/')
 def safra(request):
     layouts = ['CONSIGNADO', 'Layout 2', 'Layout 3']  # Adicione aqui os diferentes layouts disponíveis
